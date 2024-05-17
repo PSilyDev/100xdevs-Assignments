@@ -5,11 +5,7 @@
  */
 
 function wait1(t) {
-    return new Promise(function(resolve){
-        setTimeout(() => {
-            resolve()
-        }, t*1000)
-    })
+    return new Promise(resolve => setTimeout(resolve, t*1000))
 }
 
 function wait2(t) {
