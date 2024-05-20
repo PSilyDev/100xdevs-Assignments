@@ -16,6 +16,35 @@ setInterval(() => {
     numberOfRequestsForUser = {};
 }, 1000)
 
+app.use(function(req, res, next){
+  // get user id from header
+  const userId = req.header['user-id']
+
+  // check if numberOfRequestsForUser for a particular user exists
+  if(numberOfRequestsForUser[userId]){
+    
+    // append the numberOfRequestsForUser
+    numberOfRequestsForUser[userId] += 1
+
+    // check if it greater than 5
+    if(numberOfRequestsForUser[userId] > 5){
+      res.status(404).send("too many requests!!!");
+    }
+    else{
+      // pass the request to next
+      next();
+    }
+
+  }
+  // if the numberOfRequestsForUser for a particular user does not exists then create one and set initial value as 1
+  else{
+    numberOfRequestsForUser[userId] = 1;
+
+    // pass the request to next
+    next();
+  }
+})
+
 app.get('/user', function(req, res) {
   res.status(200).json({ name: 'john' });
 });
