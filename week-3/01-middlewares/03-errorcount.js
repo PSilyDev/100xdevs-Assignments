@@ -24,8 +24,11 @@ app.get('/errorCount', function(req, res) {
 });
 
 app.use((err, req, res, next) => {
-  res.status(404);
+  if(err){
+    res.status(404)
+  }
   errorCount += 1
+  next()
 })
 
 module.exports = app;
