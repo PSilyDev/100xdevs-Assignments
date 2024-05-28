@@ -16,12 +16,7 @@
     Response: 200 OK with the todo item in JSON format if found, or 404 Not Found if not found.
     Example: GET http://localhost:3000/todos/123
     
-  3. POST /todos - Create a new todo item
-    Description: Creates a new todo item.
-    Request Body: JSON object representing the todo item.
-    Response: 201 Created with the ID of the created todo item in JSON format. eg: {id: 1}
-    Example: POST http://localhost:3000/todos
-    Request Body: { "title": "Buy groceries", "completed": false, description: "I should buy groceries" }
+  
     
   4. PUT /todos/:id - Update an existing todo item by ID
     Description: Updates an existing todo item identified by its ID.
@@ -39,11 +34,30 @@
 
   Testing the server - run `npm run test-todoServer` command in terminal
  */
-  const express = require('express');
-  const bodyParser = require('body-parser');
+const express = require('express');
+const bodyParser = require('body-parser');
   
-  const app = express();
+const app = express();
   
-  app.use(bodyParser.json());
-  
-  module.exports = app;
+app.use(bodyParser.json());
+
+let todos = [];
+
+// 3. POST /todos - Create a new todo item
+// Description: Creates a new todo item.
+// Request Body: JSON object representing the todo item.
+// Response: 201 Created with the ID of the created todo item in JSON format. eg: {id: 1}
+// Example: POST http://localhost:3000/todos
+// Request Body: { "title": "Buy groceries", "completed": false, description: "I should buy groceries" }
+
+app.post('/todos', (req, res) => {
+  let toDoItem = req.body.todo;
+  let unique_id = Math.floor(Math.random() * 100)
+  // "id" + Math.random().toString(16).slice(2)
+  toDoItem.unique_id = unique_id;
+  todos.push(toDoItem);
+
+  res.status(201).send({id: unique_id})
+})
+
+module.exports = app;
