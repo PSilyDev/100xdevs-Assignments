@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 // Connect to MongoDB
 // use %40 for @
-mongoose.connect('mongodb+srv://PSilyDev:%40Yashsri01@100xdev.crsftik.mongodb.net/Course');
+mongoose.connect(process.env.DB_URL);
 
 // Define schemas
 const AdminSchema = new mongoose.Schema({
