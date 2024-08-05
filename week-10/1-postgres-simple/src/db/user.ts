@@ -1,5 +1,6 @@
 import { client } from "..";
 
+
 /*
  * Should insert into the users table
  * Should return the User object
@@ -10,7 +11,19 @@ import { client } from "..";
  * }
  */
 export async function createUser(username: string, password: string, name: string) {
-    
+    try{
+        await client.connect();
+        const insertQuery = "INSERT INTO users (username, name, password) VALUES ($1, $2, $3)";
+        const values = [username, name, password];
+        const res = await client.query(insertQuery, values);
+        console.log('Insertion success: ', res);
+    }
+    catch(err){
+        console.log('Error during insertion, err : ', err);
+    }
+    finally{
+        await client.end();
+    }
 }
 
 /*
@@ -22,5 +35,18 @@ export async function createUser(username: string, password: string, name: strin
  * }
  */
 export async function getUser(userId: number) {
+    
+    await client.connect();
+    const query = "SELECT * FROM users WHERE userId = $1";
+    const res = await client.query(query, [userId]);
+
+    if (res.rows.length > 0){
+        console.log('User found: ', res.rows[0]);
+        return res.rows[0];
+    }
+    else{
+        console.log('No user found with the given userID');
+        return null;
+    }
     
 }

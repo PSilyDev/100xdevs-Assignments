@@ -2,6 +2,7 @@
   "name": "1-postgres-simple",
   "version": "1.0.0",
   "description": "",
+  "module": "true",
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
