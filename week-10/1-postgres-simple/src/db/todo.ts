@@ -10,7 +10,26 @@ import { client } from "..";
  * }
  */
 export async function createTodo(userId: number, title: string, description: string) {
-    
+    try{
+        await client.connect()
+        const insertQuery = "INSERT INTO todos (userId, title, description, done) VALUES ($1, $2, $3, $4)";
+        const values = [userId, title, description, false];
+        const res = await client.query(insertQuery, values);
+        const todo = res.rows[0];
+        return {
+            title: todo.title,
+            description: todo.description,
+            done: todo.done,
+            id: todo.id
+        }
+    }
+    catch(err){
+        console.log('Error during insertion, err : ', err);
+        throw err;
+    }
+    finally{
+        await client.end();
+    }
 }
 /*
  * mark done as true for this specific todo.
@@ -23,7 +42,26 @@ export async function createTodo(userId: number, title: string, description: str
  * }
  */
 export async function updateTodo(todoId: number) {
-
+    try{
+        await client.connect();
+        const updateQuery = "UPDATE todos SET done = true WHERE todoId = $1";
+        const value = [todoId];
+        const res = await client.query(updateQuery, value);
+        const todo = res.rows[0];
+        return {
+            title: todo.title,
+            description: todo.description,
+            done: todo.done,
+            id: todo.id
+        }
+    }
+    catch(err){
+        console.log('Error during updation, err : ', err);
+        throw err;
+    }
+    finally{
+        await client.end();
+    }
 }
 
 /*
@@ -37,5 +75,6 @@ export async function updateTodo(todoId: number) {
  * }]
  */
 export async function getTodos(userId: number) {
+    
 
 }
