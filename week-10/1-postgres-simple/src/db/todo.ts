@@ -11,7 +11,7 @@ import { client } from "..";
  */
 export async function createTodo(userId: number, title: string, description: string) {
     try{
-        await client.connect()
+        // await client.connect()
         const insertQuery = "INSERT INTO todos (userId, title, description, done) VALUES ($1, $2, $3, $4)";
         const values = [userId, title, description, false];
         const res = await client.query(insertQuery, values);
@@ -28,7 +28,7 @@ export async function createTodo(userId: number, title: string, description: str
         throw err;
     }
     finally{
-        await client.end();
+        // await client.end();
     }
 }
 /*
@@ -43,7 +43,7 @@ export async function createTodo(userId: number, title: string, description: str
  */
 export async function updateTodo(todoId: number) {
     try{
-        await client.connect();
+        // await client.connect();
         const updateQuery = "UPDATE todos SET done = true WHERE todoId = $1";
         const value = [todoId];
         const res = await client.query(updateQuery, value);
@@ -60,7 +60,7 @@ export async function updateTodo(todoId: number) {
         throw err;
     }
     finally{
-        await client.end();
+        // await client.end();
     }
 }
 
@@ -75,6 +75,19 @@ export async function updateTodo(todoId: number) {
  * }]
  */
 export async function getTodos(userId: number) {
-    
+    try{
+        // await client.connect();
+        const fetchQuery = "SELECT (title, description, done, id) FROM todos WHERE userId = $1";
+        const value = [userId];
+        const res = await client.query(fetchQuery, value);
+        return res.rows;
+    }
+    catch(err){
+        console.log('Error during fetching, err : ', err);
+        throw err;
+    }
+    finally{
+        // await client.end();
+    }
 
 }
